@@ -1,6 +1,10 @@
 <script>
 import JsonBox from '../json-box'
 
+function naturalSort(a, b) {
+  a.localeCompare(b, 'fr', {ignorePunctuation: true})
+}
+
 export default {
   name: 'JsonArray',
   props: {
@@ -21,13 +25,11 @@ export default {
   },
   computed: {
     ordered () {
-      let value = this.jsonValue
-
       if (!this.sort) {
-        return value
+        return this.jsonValue
       }
 
-      return value.sort()
+      return this.jsonValue.sort(naturalSort())
     }
   },
   methods: {
@@ -68,21 +70,25 @@ export default {
         innerHTML: '['
       }
     }))
-
-    this.ordered.forEach((value, key) => {
-      elements.push(h(JsonBox, {
-        key,
-        style: {
-          display: this.expand ? undefined : 'none'
-        },
-        props: {
-          sort: this.sort,
-          // keyName: key,
-          depth: this.depth + 1,
-          value,
-        }
-      }))
-    })
+    
+    for (const key in this.ordered) {
+      if (this.ordered[key] !== undefined) {
+        const value = this.ordered[value]
+        
+        elements.push(h(JsonBox, {
+          key,
+          style: {
+            display: this.expand ? undefined : 'none'
+          },
+          props: {
+            sort: this.sort,
+            // keyName: key,
+            depth: this.depth + 1,
+            value,
+          }
+        }))
+      }
+    }
 
     if (!this.expand && this.jsonValue.length) {
       elements.push(h('span', {
