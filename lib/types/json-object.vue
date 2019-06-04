@@ -1,6 +1,10 @@
 <script>
 import JsonBox from '../json-box'
 
+function naturalSort(a, b) {
+  a.localeCompare(b, 'fr', {ignorePunctuation: true})
+}
+
 export default {
   name: 'JsonObject',
   props: {
@@ -26,9 +30,12 @@ export default {
       }
 
       const ordered = {}
-      Object.keys(this.jsonValue).forEach(key => {
-        ordered[key] = this.jsonValue[key]
-      })
+      for (const key of Object.keys(this.jsonValue).sort(naturalSort)) {
+        if (this.jsonValue.hasOwnProperty(key)) {
+          ordered[key] = this.jsonValue[key]
+        }
+      }
+      
       return ordered
     }
   },
@@ -71,9 +78,9 @@ export default {
       }
     }))
 
-    for (let key in this.ordered) {
+    for (const key in this.ordered) {
       if (this.ordered.hasOwnProperty(key)) {
-        let value = this.ordered[key]
+        const value = this.ordered[key]
 
         elements.push(h(JsonBox, {
           key,
