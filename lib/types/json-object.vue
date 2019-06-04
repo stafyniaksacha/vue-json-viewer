@@ -74,9 +74,6 @@ export default {
       extraKeys.sort()
     }
 
-    console.log(this.primitiveFirst)
-    console.log(primitiveKeys)
-
     const keys = [].concat(primitiveKeys, complexKeys, extraKeys)
 
     this.ordered = {}
@@ -85,21 +82,6 @@ export default {
         this.ordered[key] = this.jsonValue[key]
       }
     }
-
-    /* } else {
-      let keys = Object.keys(this.jsonValue)
-
-      if (this.sort) {
-        keys.sort()
-      }
-
-      this.ordered = {}
-      for (const key of keys) {
-        if (this.jsonValue.hasOwnProperty(key)) {
-          this.ordered[key] = this.jsonValue[key]
-        }
-      }
-    } */
   },
   methods: {
     toggle() {

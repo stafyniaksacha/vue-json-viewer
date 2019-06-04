@@ -46,7 +46,7 @@ export default {
   },
   props: {
     value: {
-      type: [Object, Array, String, Number, Boolean, Function],
+      type: [Object, Array, String, Number, BigInt, Boolean, Function],
       required: true
     },
     expandDepth: {
