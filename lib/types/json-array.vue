@@ -79,7 +79,6 @@ export default {
     for (const key in this.ordered) {
       if (this.ordered[key] !== undefined) {
         const value = this.ordered[key]
-
         
         elements.push(h(JsonBox, {
           key,

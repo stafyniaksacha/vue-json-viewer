@@ -37,8 +37,6 @@ export default {
       keys.sort()
     }
 
-    console.log(keys)
-
     this.ordered = {}
     for (const key of keys) {
       if (this.jsonValue.hasOwnProperty(key)) {
