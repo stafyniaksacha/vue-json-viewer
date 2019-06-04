@@ -18,6 +18,7 @@
         ref="jsonBox"
         :value="value"
         :sort="sort"
+        :primitive-first="primitiveFirst"
       />
     </div>
     <div 
@@ -60,6 +61,10 @@ export default {
       type: Boolean,
       default: false
     },
+    primitiveFirst: {
+      type: Boolean,
+      default: false
+    },
     boxed: {
       type: Boolean,
       default: false
@@ -81,14 +86,14 @@ export default {
       expandCode: false
     }
   },
-  watch: {
-    value() {
-      this.onResized()
-    }
-  },
   computed: {
     jvClass () {
       return 'jv-container ' + this.theme + (this.boxed ? ' boxed' : '')
+    }
+  },
+  watch: {
+    value() {
+      this.onResized()
     }
   },
   mounted: function () {

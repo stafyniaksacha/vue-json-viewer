@@ -20,6 +20,7 @@ export default {
       default: ''
     },
     sort: Boolean,
+    primitiveFirst: Boolean,
     depth: {
       type: Number,
       default: 0
@@ -57,7 +58,10 @@ export default {
       dataType = JsonArray
     } else if (typeof this.value === 'object') {
       dataType = JsonObject
-    } else if (typeof this.value === 'number') {
+    } else if (
+      typeof this.value === 'number'
+      || typeof this.value === 'bigint'
+    ) {
       dataType = JsonNumber
     } else if (typeof this.value === 'string') {
       dataType = JsonString
@@ -98,6 +102,7 @@ export default {
         jsonValue: this.value,
         keyName: this.keyName,
         sort: this.sort,
+        primitiveFirst: this.primitiveFirst,
         depth: this.depth,
         expand: this.expand
       },

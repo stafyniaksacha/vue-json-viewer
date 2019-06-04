@@ -23,11 +23,19 @@ export default {
       default: 0
     },
     sort: Boolean,
-    expand: Boolean
+    expand: Boolean,
+    primitiveFirst: Boolean,
   },
   data () {
     return {
       ordered: [],
+    }
+  },
+  mounted () {
+    this.ordered = this.jsonValue
+
+    if (this.sort) {
+      this.ordered.sort(naturalSort)
     }
   },
   methods: {
@@ -42,13 +50,6 @@ export default {
         evt.initEvent('resized', true, false)
         this.$el.dispatchEvent(evt)
       }
-    }
-  },
-  mounted () {
-    this.ordered = this.jsonValue
-
-    if (this.sort) {
-      this.ordered.sort(naturalSort)
     }
   },
   render (h) {
@@ -87,6 +88,7 @@ export default {
           },
           props: {
             sort: this.sort,
+            primitiveFirst: this.primitiveFirst,
             // keyName: key,
             depth: this.depth + 1,
             value,

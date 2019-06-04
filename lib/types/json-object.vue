@@ -23,7 +23,8 @@ export default {
       default: 0
     },
     expand: Boolean,
-    sort: Boolean
+    sort: Boolean,
+    primitiveFirst: Boolean,
   },
   data () {
     return {
@@ -31,11 +32,52 @@ export default {
     }
   },
   mounted () {
-    let keys = Object.keys(this.jsonValue)
+    // if (this.primitiveFirst) {
+    let primitiveKeys = []
+    let complexKeys = []
+    let extraKeys = []
+
+    for (const key in this.jsonValue) {
+      if (this.jsonValue.hasOwnProperty(key)) {
+        const value = this.jsonValue[key]
+        if (
+          this.primitiveFirst 
+          && (
+            value === null
+            || [
+              'string', 
+              'number', 
+              'boolean', 
+              'bigint', 
+              'undefined'
+            ].includes(typeof value)
+          )
+        ) {
+          primitiveKeys.push(key)
+        } else if (
+          this.primitiveFirst 
+          && (
+            ['object'].includes(typeof value)
+            || Array.isArray(value)
+          )
+        ) {
+          complexKeys.push(key)
+        } else {
+          extraKeys.push(key)
+        }
+      }
+    }
 
     if (this.sort) {
-      keys.sort()
+      primitiveKeys.sort()
+      complexKeys.sort()
+      extraKeys.sort()
     }
+
+    console.log(this.primitiveFirst)
+    console.log(primitiveKeys)
+
+    const keys = [].concat(primitiveKeys, complexKeys, extraKeys)
 
     this.ordered = {}
     for (const key of keys) {
@@ -43,6 +85,21 @@ export default {
         this.ordered[key] = this.jsonValue[key]
       }
     }
+
+    /* } else {
+      let keys = Object.keys(this.jsonValue)
+
+      if (this.sort) {
+        keys.sort()
+      }
+
+      this.ordered = {}
+      for (const key of keys) {
+        if (this.jsonValue.hasOwnProperty(key)) {
+          this.ordered[key] = this.jsonValue[key]
+        }
+      }
+    } */
   },
   methods: {
     toggle() {
@@ -94,6 +151,7 @@ export default {
           },
           props: {
             sort: this.sort,
+            primitiveFirst: this.primitiveFirst,
             keyName: key,
             depth: this.depth + 1,
             value,
