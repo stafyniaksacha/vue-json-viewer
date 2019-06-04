@@ -2,7 +2,9 @@
 import JsonBox from '../json-box'
 
 function naturalSort(a, b) {
-  a.localeCompare(b, 'fr', {ignorePunctuation: true})
+  if (!a || !b) return 0
+  if (typeof a !== "string" || typeof a !== "string" ) return 0
+  b.localeCompare(a, 'fr', {ignorePunctuation: true})
 }
 
 export default {
@@ -23,20 +25,25 @@ export default {
     expand: Boolean,
     sort: Boolean
   },
-  computed: {
-    ordered () {
-      if (!this.sort) {
-        return this.jsonValue
-      }
+  data () {
+    return {
+      ordered: [],
+    }
+  },
+  mounted () {
+    let keys = Object.keys(this.jsonValue)
 
-      const ordered = {}
-      for (const key of Object.keys(this.jsonValue).sort(naturalSort)) {
-        if (this.jsonValue.hasOwnProperty(key)) {
-          ordered[key] = this.jsonValue[key]
-        }
+    if (this.sort) {
+      keys.sort()
+    }
+
+    console.log(keys)
+
+    this.ordered = {}
+    for (const key of keys) {
+      if (this.jsonValue.hasOwnProperty(key)) {
+        this.ordered[key] = this.jsonValue[key]
       }
-      
-      return ordered
     }
   },
   methods: {
