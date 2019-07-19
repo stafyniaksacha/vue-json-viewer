@@ -92,25 +92,26 @@ export default {
     }
   },
   watch: {
-    value(value) {
-      this.value = value
-      this.onResized()
-    }
-  },
-  mounted: function () {
-    if (this.boxed && this.$refs.jsonBox) {
-      this.onResized()
-      this.$refs.jsonBox.$el.addEventListener("resized", this.onResized, true)
-    }
-    if (this.copyable) {
-      const clipBoard = new Clipboard(this.$refs.clip, {
-        text: () => {
-          return JSON.stringify(this.value, null, 2)
+    value: {
+      immediate: true,
+      handler(value) {
+        this.value = value
+
+        if (this.boxed && this.$refs.jsonBox) {
+          this.onResized()
+          this.$refs.jsonBox.$el.addEventListener("resized", this.onResized, true)
         }
-      });
-      clipBoard.on('success', () => {
-        this.onCopied()
-      })
+        if (this.copyable) {
+          const clipBoard = new Clipboard(this.$refs.clip, {
+            text: () => {
+              return JSON.stringify(this.value, null, 2)
+            }
+          });
+          clipBoard.on('success', () => {
+            this.onCopied()
+          })
+        }
+      }
     }
   },
   methods: {

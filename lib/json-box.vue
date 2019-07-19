@@ -31,8 +31,14 @@ export default {
       expand: true
     }
   },
-  mounted() {
-    this.expand = this.depth >= this.expandDepth ? false : true
+  watch: {
+    value: {
+      immediate: true,
+      handler(value) {
+        this.value = value
+        this.expand = this.depth >= this.expandDepth ? false : true
+      }
+    }
   },
   methods: {
     toggle() {

@@ -31,55 +31,62 @@ export default {
       ordered: [],
     }
   },
-  mounted () {
-    // if (this.primitiveFirst) {
-    let primitiveKeys = []
-    let complexKeys = []
-    let extraKeys = []
+  watch: {
+    jsonValue: {
+      immediate: true,
+      handler(jsonValue) {
+        this.jsonValue = jsonValue
+        
+        // if (this.primitiveFirst) {
+        let primitiveKeys = []
+        let complexKeys = []
+        let extraKeys = []
 
-    for (const key in this.jsonValue) {
-      if (this.jsonValue.hasOwnProperty(key)) {
-        const value = this.jsonValue[key]
-        if (
-          this.primitiveFirst 
-          && (
-            value === null
-            || [
-              'string', 
-              'number', 
-              'boolean', 
-              'bigint', 
-              'undefined'
-            ].includes(typeof value)
-          )
-        ) {
-          primitiveKeys.push(key)
-        } else if (
-          this.primitiveFirst 
-          && (
-            ['object'].includes(typeof value)
-            || Array.isArray(value)
-          )
-        ) {
-          complexKeys.push(key)
-        } else {
-          extraKeys.push(key)
+        for (const key in this.jsonValue) {
+          if (this.jsonValue.hasOwnProperty(key)) {
+            const value = this.jsonValue[key]
+            if (
+              this.primitiveFirst 
+              && (
+                value === null
+                || [
+                  'string', 
+                  'number', 
+                  'boolean', 
+                  'bigint', 
+                  'undefined'
+                ].includes(typeof value)
+              )
+            ) {
+              primitiveKeys.push(key)
+            } else if (
+              this.primitiveFirst 
+              && (
+                ['object'].includes(typeof value)
+                || Array.isArray(value)
+              )
+            ) {
+              complexKeys.push(key)
+            } else {
+              extraKeys.push(key)
+            }
+          }
         }
-      }
-    }
 
-    if (this.sort) {
-      primitiveKeys.sort()
-      complexKeys.sort()
-      extraKeys.sort()
-    }
+        if (this.sort) {
+          primitiveKeys.sort()
+          complexKeys.sort()
+          extraKeys.sort()
+        }
 
-    const keys = [].concat(primitiveKeys, complexKeys, extraKeys)
+        const keys = [].concat(primitiveKeys, complexKeys, extraKeys)
 
-    this.ordered = {}
-    for (const key of keys) {
-      if (this.jsonValue.hasOwnProperty(key)) {
-        this.ordered[key] = this.jsonValue[key]
+        this.ordered = {}
+        for (const key of keys) {
+          if (this.jsonValue.hasOwnProperty(key)) {
+            this.ordered[key] = this.jsonValue[key]
+          }
+        }
       }
     }
   },
