@@ -92,7 +92,8 @@ export default {
     }
   },
   watch: {
-    value() {
+    value(value) {
+      this.value = value
       this.onResized()
     }
   },
